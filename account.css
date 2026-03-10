@@ -176,3 +176,24 @@ body{
   align-items:center;
   margin-top:-25px;
 }
+.bottom-nav{
+  display:flex;
+  justify-content:space-around;
+  background:#111;
+  padding:10px 0;
+}
+
+.nav-item{
+  text-align:center;
+  color:#888;
+  font-size:14px;
+}
+
+.nav-item i{
+  font-size:22px;
+  display:block;
+}
+
+.nav-item.active{
+  color:#1e90ff;
+}
