@@ -78,3 +78,30 @@ function goAccount(){ window.location.href = "./account.html"; }
 
 /* Default PC page */
 displayGames(games.pc);
+// NAVIGATION
+const homeNav = document.getElementById("homeNav");
+const gamesNav = document.getElementById("gamesNav");
+const tournamentsNav = document.getElementById("tournamentsNav");
+const chatNav = document.getElementById("chatNav");
+const accountNav = document.getElementById("accountNav");
+
+// Go to pages
+homeNav.onclick = () => {
+  window.location.href = "home.html";
+};
+
+AccountNav.onclick = () => {
+  window.location.href = "account.html";
+};
+
+tournamentsNav.onclick = () => {
+  window.location.href = "tournaments.html";
+};
+
+chatNav.onclick = () => {
+  window.location.href = "chat.html";
+};
+
+accountNav.onclick = () => {
+  window.location.href = "account.html";
+};
