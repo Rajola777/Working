@@ -138,7 +138,6 @@ body{
   cursor:pointer;
 }
 
-/* NAV (like home) */
 .bottom-nav{
   position:fixed;
   bottom:0;
@@ -147,7 +146,9 @@ body{
   background:#060a18;
   display:flex;
   justify-content:space-around;
+  align-items:center;
   padding:10px 0;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.4);
 }
 
 .nav-item{
@@ -156,6 +157,7 @@ body{
   align-items:center;
   font-size:12px;
   color:rgba(255,255,255,0.7);
+  cursor:pointer;
 }
 
 .nav-item i{
@@ -164,36 +166,4 @@ body{
 
 .nav-item.active{
   color:#3ea1ff;
-}
-
-.nav-item.big{
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  background:#0b1433;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin-top:-25px;
-}
-.bottom-nav{
-  display:flex;
-  justify-content:space-around;
-  background:#111;
-  padding:10px 0;
-}
-
-.nav-item{
-  text-align:center;
-  color:#888;
-  font-size:14px;
-}
-
-.nav-item i{
-  font-size:22px;
-  display:block;
-}
-
-.nav-item.active{
-  color:#1e90ff;
-}
+    }
