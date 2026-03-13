@@ -463,8 +463,6 @@ img:"images/amongus.jpg",
 download:"#",
 rating:4
 }
-
-];
     ];
 
 const container = document.getElementById("gamesContainer");
