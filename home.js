@@ -1,6 +1,70 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // ===== NAVIGATION =====
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBWW5kT1GqpIGou84aOfmo3y0osUd7rRQ",
+  authDomain: "zchat-7b59a.firebaseapp.com",
+  projectId: "zchat-7b59a",
+  storageBucket: "zchat-7b59a.firebasestorage.app",
+  messagingSenderId: "391204652656",
+  appId: "1:391204652656:web:7c88d2bfb7ca2261ecd6b5",
+  measurementId: "G-YB4MSXJ6QC"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+document.addEventListener("DOMContentLoaded", () => {
+  // ===== Sidebar =====
+  const sidebar = document.getElementById("sidebar");
+  const menuBtn = document.getElementById("menuBtn");
+  const closeSidebar = document.getElementById("closeSidebar");
+
+  if (menuBtn && closeSidebar && sidebar) {
+    menuBtn.addEventListener("click", () => sidebar.classList.add("open"));
+    closeSidebar.addEventListener("click", () => sidebar.classList.remove("open"));
+  }
+
+  // ===== Theme Toggle =====
+  const themeBtn = document.getElementById("menuTheme");
+  const themeLabel = document.getElementById("themeLabel");
+  if (themeBtn && themeLabel) {
+    let currentTheme = localStorage.getItem("theme") || "dark";
+    document.body.classList.toggle("light-theme", currentTheme === "light");
+    themeLabel.innerText = currentTheme === "light" ? "Light" : "Dark";
+
+    themeBtn.addEventListener("click", () => {
+      if (document.body.classList.contains("light-theme")) {
+        document.body.classList.remove("light-theme");
+        localStorage.setItem("theme", "dark");
+        themeLabel.innerText = "Dark";
+      } else {
+        document.body.classList.add("light-theme");
+        localStorage.setItem("theme", "light");
+        themeLabel.innerText = "Light";
+      }
+    });
+  }
+
+  // ===== Notifications (Firebase) =====
+  const notificationList = document.getElementById("notificationList");
+  if (notificationList) {
+    const q = query(collection(db, "notifications"), orderBy("time", "desc"));
+    onSnapshot(q, (snapshot) => {
+      notificationList.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        const item = document.createElement("div");
+        item.className = "notification-item";
+        item.innerHTML = `<strong>${data.title}</strong><p>${data.message}</p>`;
+        notificationList.appendChild(item);
+      });
+    });
+  }
+
+  // ===== Navigation =====
   const pages = {
     homeNav: "index.html",
     gamesNav: "games.html",
@@ -8,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
     chatNav: "chat.html",
     accountNav: "account.html"
   };
-
   Object.keys(pages).forEach(id => {
     const element = document.getElementById(id);
     if(element){
@@ -21,20 +84,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const dotsBtn = document.getElementById("dotsBtn");
   if(dotsBtn) dotsBtn.addEventListener("click", () => alert("More options menu ⚙️"));
 
-  // ===== SLIDER =====
+  // ===== Slider =====
   const slides = document.getElementById("slides");
   if(slides){
     const slideImages = Array.from(slides.children);
     const totalSlides = slideImages.length;
 
-    // Clone first and last slide for infinite loop
     const firstClone = slideImages[0].cloneNode(true);
     const lastClone = slideImages[totalSlides - 1].cloneNode(true);
 
     slides.appendChild(firstClone);
     slides.insertBefore(lastClone, slides.children[0]);
 
-    let index = 1; // start from first real slide
+    let index = 1;
     slides.style.transform = `translateX(-${index * 100}%)`;
 
     function nextSlide() {
@@ -42,23 +104,49 @@ document.addEventListener("DOMContentLoaded", () => {
       slides.style.transition = "transform 0.7s ease-in-out";
       slides.style.transform = `translateX(-${index * 100}%)`;
     }
-
-    // Auto slide every 3 seconds
     let sliderInterval = setInterval(nextSlide, 3000);
 
     slides.addEventListener("transitionend", () => {
-      if(index >= slides.children.length - 1){ // reached cloned first
+      if(index >= slides.children.length - 1){
         slides.style.transition = "none";
         index = 1;
         slides.style.transform = `translateX(-${index * 100}%)`;
       }
-      if(index <= 0){ // reached cloned last
+      if(index <= 0){
         slides.style.transition = "none";
         index = slides.children.length - 2;
         slides.style.transform = `translateX(-${index * 100}%)`;
       }
     });
   }
+
+  // ===== Games =====
+  const gamesContainer = document.getElementById("gamesContainer");
+  if (gamesContainer) {
+    function renderGames(list) {
+      gamesContainer.innerHTML = "";
+      list.forEach(game => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        card.innerHTML = `
+          <img src="${game.img}">
+          <div class="game-info">
+            <h3>${game.title}</h3>
+            <p>${game.desc}</p>
+            <div class="game-rating">${"★".repeat(Math.floor(game.rating))}</div>
+          </div>
+        `;
+        card.addEventListener("click", () => {
+          document.getElementById("popupImg").src = game.img;
+          document.getElementById("popupTitle").innerText = game.title;
+          document.getElementById("popupDesc").innerText = game.desc;
+          document.getElementById("popupDownload").href = game.download;
+          document.getElementById("gamePopup").style.display = "flex";
+        });
+        gamesContainer.appendChild(card);
+      });
+    }
+
 
   // ===== GAMES POPUP =====
   const games = [
@@ -457,185 +545,41 @@ download:"#",
 rating:4
 }
     ];
-
-const container = document.getElementById("gamesContainer");
-
-  function renderGames(list){
-    container.innerHTML = "";
-
-    list.forEach(game => {
-      const card = document.createElement("div");
-      card.className = "game-card";
-
-      card.innerHTML = `
-        <img src="${game.img}">
-        <div class="game-info">
-          <h3>${game.title}</h3>
-          <p>${game.desc}</p>
-          <div class="game-rating">${"★".repeat(Math.floor(game.rating))}</div>
-        </div>
-      `;
-
-      card.addEventListener("click", () => {
-        document.getElementById("popupImg").src = game.img;
-        document.getElementById("popupTitle").innerText = game.title;
-        document.getElementById("popupDesc").innerText = game.desc;
-        document.getElementById("popupDownload").href = game.download;
-        document.getElementById("gamePopup").style.display = "flex";
+ // ===== Search =====
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput) {
+      searchInput.addEventListener("input", () => {
+        const queryText = searchInput.value.toLowerCase();
+        const filteredGames = games.filter(game =>
+          game.title.toLowerCase().includes(queryText) ||
+          game.desc.toLowerCase().includes(queryText)
+        );
+        renderGames(filteredGames);
       });
+    }
 
-      container.appendChild(card);
-    });
+    window.closeGame = function() {
+      document.getElementById("gamePopup").style.display = "none";
+    }
   }
 
-  // show all games first
-  renderGames(games);
-
-  // ===== SEARCH =====
-  const searchInput = document.getElementById("searchInput");
-
-  searchInput.addEventListener("input", () => {
-    const query = searchInput.value.toLowerCase();
-
-    const filteredGames = games.filter(game =>
-      game.title.toLowerCase().includes(query) ||
-      game.desc.toLowerCase().includes(query)
-    );
-
-    renderGames(filteredGames);
-  });
-
-  window.closeGame = function(){
-    document.getElementById("gamePopup").style.display = "none";
-  }
-
-});
-// Sidebar toggle
-const sidebar = document.getElementById("sidebar");
-const menuBtn = document.getElementById("menuBtn");
-const closeSidebar = document.getElementById("closeSidebar");
-
-menuBtn.addEventListener("click", () => sidebar.classList.add("open"));
-closeSidebar.addEventListener("click", () => sidebar.classList.remove("open"));
-
-// Redirect pages
-const menuPages = {
-  menuSettings: "settings.html",
-  menuPrivacy: "privacy.html",
-  menuShare: "share.html",
-  menuHelp: "help.html",
-  menuRate: "rate.html",
-  menuAbout: "about.html",
-  menuLogout: "logout.html"
-};
-
-Object.keys(menuPages).forEach(id => {
-  const element = document.getElementById(id);
-  if (element) {
-    element.addEventListener("click", () => {
-      window.location.href = menuPages[id];
-    });
-  }
-});
-// Dark/Light theme toggle
-const themeBtn = document.getElementById("menuTheme");
-const themeLabel = document.getElementById("themeLabel");
-
-// Check saved theme on load
-let currentTheme = localStorage.getItem("theme") || "dark";
-document.body.classList.toggle("light-theme", currentTheme === "light");
-themeLabel.innerText = currentTheme === "light" ? "Light" : "Dark";
-
-// Toggle on click
-themeBtn.addEventListener("click", () => {
-  if (document.body.classList.contains("light-theme")) {
-    document.body.classList.remove("light-theme");
-    localStorage.setItem("theme", "dark");
-    themeLabel.innerText = "Dark";
-  } else {
-    document.body.classList.add("light-theme");
-    localStorage.setItem("theme", "light");
-    themeLabel.innerText = "Light";
-  }
-});
-const notificationBtn = document.getElementById("notificationBtn");
-const notificationPanel = document.getElementById("notificationPanel");
-const closeNotifications = document.getElementById("closeNotifications");
-
-notificationBtn.addEventListener("click", () => {
-  notificationPanel.classList.add("open");
-});
-
-closeNotifications.addEventListener("click", () => {
-  notificationPanel.classList.remove("open");
-});
-import {
-  getFirestore,
-  collection,
-  onSnapshot,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const db = getFirestore();
-
-const notificationList = document.getElementById("notificationList");
-
-const q = query(collection(db, "notifications"), orderBy("time","desc"));
-
-onSnapshot(q, (snapshot) => {
-
-  notificationList.innerHTML = "";
-
-  snapshot.forEach((doc) => {
-
-    const data = doc.data();
-
-    const item = document.createElement("div");
-    item.className = "notification-item";
-
-    item.innerHTML = `
-      <strong>${data.title}</strong>
-      <p>${data.message}</p>
-    `;
-
-    notificationList.appendChild(item);
-
-  });
-
-});
-import {
-  getFirestore,
-  collection,
-  query,
-  orderBy,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const notificationList = document.getElementById("notificationList");
-
-const q = query(
-  collection(db, "notifications"),
-  orderBy("time", "desc")
-);
-
-onSnapshot(q, (snapshot) => {
-
-  notificationList.innerHTML = "";
-
-  snapshot.forEach((doc) => {
-
-    const data = doc.data();
-
-    const item = document.createElement("div");
-    item.className = "notification-item";
-
-    item.innerHTML = `
-      <strong>${data.title}</strong>
-      <p>${data.message}</p>
-    `;
-
-    notificationList.appendChild(item);
-
+  // ===== Sidebar menu pages =====
+  const menuPages = {
+    menuSettings: "settings.html",
+    menuPrivacy: "privacy.html",
+    menuShare: "share.html",
+    menuHelp: "help.html",
+    menuRate: "rate.html",
+    menuAbout: "about.html",
+    menuLogout: "logout.html"
+  };
+  Object.keys(menuPages).forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener("click", () => {
+        window.location.href = menuPages[id];
+      });
+    }
   });
 
 });
