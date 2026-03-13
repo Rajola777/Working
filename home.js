@@ -104,16 +104,17 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("gamePopup").style.display = "none";
   }
 });
+// ===== SEARCH FUNCTIONALITY =====
 const searchInput = document.getElementById("searchInput");
 
 searchInput.addEventListener("input", () => {
   const query = searchInput.value.toLowerCase();
 
-  // Remove all current cards
+  // Clear all current game cards
   container.innerHTML = "";
 
-  // Filter games based on title or description
-  const filteredGames = games.filter(game => 
+  // Filter games by title or description
+  const filteredGames = games.filter(game =>
     game.title.toLowerCase().includes(query) ||
     game.desc.toLowerCase().includes(query)
   );
@@ -130,6 +131,7 @@ searchInput.addEventListener("input", () => {
         <div class="game-rating">${"★".repeat(Math.floor(game.rating))}</div>
       </div>
     `;
+
     card.addEventListener("click", () => {
       document.getElementById("popupImg").src = game.img;
       document.getElementById("popupTitle").innerText = game.title;
