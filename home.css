@@ -83,17 +83,17 @@ body{
 
 .slides {
   display: flex;
-  flex-wrap: nowrap;
-  width: 100%;
+  flex-wrap: nowrap;      /* important for horizontal sliding */
+  width: 100%;            /* ensure the slides container stretches */
   transition: transform 0.7s ease-in-out;
 }
 
 .slides img {
-  width: 100%;
-  flex-shrink: 0;
-  height: 300px;
+  width: 100%;            /* one image fills slider width */
+  flex-shrink: 0;         /* prevent shrinking */
+  height: 300px;          /* same as slider height */
   object-fit: cover;
-  border-radius: 20px;  
+  border-radius: 20px;
   transition: transform 0.3s;
 }
 
