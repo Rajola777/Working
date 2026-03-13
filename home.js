@@ -77,8 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       desc:"web will grow time will tell people will be saved buy spider",
       img:"images/spiderman3.jpg",
       download:"downloads/spiderman3.apk",
-        }
-    { title:   
+        }   
     ];
 
 const container = document.getElementById("gamesContainer");
