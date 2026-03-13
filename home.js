@@ -71,13 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const games = [
     { title:"Where Winds Meet", desc:"Let the wind carry your legend to the bottomless....", img:"images/wherewindsmeet.jpg", download:"downloads/spiderman.apk", rating:4.5 },
     { title:"Black Myth:Wukong", desc:"Open world action adventure game.", img:"images/blackmythwukong.jpg", download:"downloads/gta.apk", rating:5 },
-    { title:"Red Dead Redemption", desc:"High speed racing game with many cars.", img:"images/reddeadredemption.jpg", download:"downloads/racing.apk", rating:4 }
-    {
-      title:"Spiderman3",
-      desc:"web will grow time will tell people will be saved buy spider",
-      img:"images/spiderman3.jpg",
-      download:"downloads/spiderman3.apk",
-        }   
+    { title:"Red Dead Redemption", desc:"High speed racing game with many cars.", img:"images/reddeadredemption.jpg", download:"downloads/racing.apk", rating:4 },
+    { title:"Spiderman3", desc:"web will grow time will tell people will be saved buy spider", img:"images/spiderman3.jpg", download:"downloads/spiderman3.apk", rating:3 }   
     ];
 
 const container = document.getElementById("gamesContainer");
