@@ -17,11 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
-
-  // ===== MENU / NOTIFICATION / DOTS =====
-  const menuBtn = document.getElementById("menuBtn");
-  if(menuBtn) menuBtn.addEventListener("click", () => alert("Sidebar menu will open here 🔥"));
-
   const notificationBtn = document.getElementById("notificationBtn");
   if(notificationBtn) notificationBtn.addEventListener("click", () => alert("No new notifications 🔔"));
 
