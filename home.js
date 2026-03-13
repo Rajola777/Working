@@ -517,3 +517,31 @@ const container = document.getElementById("gamesContainer");
   }
 
 });
+// Sidebar toggle
+const sidebar = document.getElementById("sidebar");
+const menuBtn = document.getElementById("menuBtn");
+const closeSidebar = document.getElementById("closeSidebar");
+
+menuBtn.addEventListener("click", () => sidebar.classList.add("open"));
+closeSidebar.addEventListener("click", () => sidebar.classList.remove("open"));
+
+// Redirect pages
+const menuPages = {
+  menuSettings: "settings.html",
+  menuPrivacy: "privacy.html",
+  menuShare: "share.html",
+  menuTheme: "theme.html",
+  menuHelp: "help.html",
+  menuRate: "rate.html",
+  menuAbout: "about.html",
+  menuLogout: "logout.html"
+};
+
+Object.keys(menuPages).forEach(id => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.addEventListener("click", () => {
+      window.location.href = menuPages[id];
+    });
+  }
+});
