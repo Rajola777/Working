@@ -41,7 +41,44 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("More options menu ⚙️");
     });
   }
+// ===== SLIDER =====
+const slides = document.getElementById("slides");
+if (slides) {
+  const slideImages = Array.from(slides.children);
+  const totalSlides = slideImages.length;
 
+  // Clone first and last slide for smooth infinite effect
+  const firstClone = slideImages[0].cloneNode(true);
+  const lastClone = slideImages[totalSlides - 1].cloneNode(true);
+
+  slides.appendChild(firstClone);
+  slides.insertBefore(lastClone, slides.children[0]);
+
+  let index = 1; // start from actual first slide
+  slides.style.transform = `translateX(-${index * 100}%)`;
+
+  function nextSlide() {
+    index++;
+    slides.style.transition = "transform 0.7s ease-in-out";
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  // Auto slide every 3 seconds
+  let sliderInterval = setInterval(nextSlide, 3000);
+
+  slides.addEventListener("transitionend", () => {
+    if (index >= slides.children.length - 1) {
+      slides.style.transition = "none";
+      index = 1;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+    if (index <= 0) {
+      slides.style.transition = "none";
+      index = slides.children.length - 2;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+  });
+}
 const games = [
   {
     title:"Where Winds Meet",
