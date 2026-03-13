@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const total = slides.children.length;
       currentIndex = (currentIndex + 1) % total;
       slides.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }, 3000);
+    }, 6000);
   }
 
 });
