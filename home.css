@@ -79,12 +79,14 @@ body{
   background:rgba(255,255,255,0.05);
   box-shadow:0 10px 30px rgba(0,0,0,0.5); /* shadow for floating effect */
   position:relative;
+  transition: all 0.3 ease-in-out;
 }
 
 .slides{
   display:flex;
   transition:transform 0.7s ease-in-out;
   width:100%;
+  flex-wrap:nowrap;
 }
 
 .slides img{
