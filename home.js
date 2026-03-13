@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ===== GAMES POPUP =====
   const games = [
-    { title:"Where Winds Meet", desc:"Let the wind carry your legend to the boundless adventure....Where Winds Meet is an epic adventure through breathtaking valleys and towering mountains.Dynamic winds and changing weather challenge your navigation and strategy.Meet fascinating characters and make choices that shape your destiny.Solve puzzles, master survival skills, and explore a world full of secrets", img:"images/wherewindsmeet.jpg", 20$ Buy:"downloads/spiderman.apk", rating:4.5 },
+    { title:"Where Winds Meet", desc:"Let the wind carry your legend to the boundless adventure....Where Winds Meet is an epic adventure through breathtaking valleys and towering mountains.Dynamic winds and changing weather challenge your navigation and strategy.Meet fascinating characters and make choices that shape your destiny.Solve puzzles, master survival skills, and explore a world full of secrets", img:"images/wherewindsmeet.jpg", download:"downloads/spiderman.apk", rating:4.5 },
     { title:"Black Myth:Wukong", desc:"Open world action adventure game.", img:"images/blackmythwukong.jpg", download:"downloads/gta.apk", rating:5 },
     { title:"Red Dead Redemption", desc:"High speed racing game with many cars.", img:"images/reddeadredemption.jpg", download:"downloads/racing.apk", rating:4 },
     { title:"Spiderman3", desc:"web will grow time will tell people will be saved buy spider", img:"images/spiderman3.jpg", download:"downloads/spiderman3.apk", rating:3 },
