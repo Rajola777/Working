@@ -385,3 +385,37 @@ body.light-theme .popup-content {
   background: rgba(255, 255, 255, 0.95);
   color: #111;
 }
+.notification-panel{
+  position:fixed;
+  top:0;
+  right:-250px;
+  width:250px;
+  height:100%;
+  background:#111;
+  color:white;
+  transition:0.3s;
+  z-index:2000;
+  box-shadow:-5px 0 15px rgba(0,0,0,0.5);
+}
+
+.notification-panel.open{
+  right:0;
+}
+
+.notification-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  border-bottom:1px solid #333;
+}
+
+.notification-item{
+  padding:15px;
+  border-bottom:1px solid #222;
+  font-size:14px;
+}
+
+.notification-item:hover{
+  background:#222;
+}
