@@ -84,42 +84,42 @@ document.addEventListener("DOMContentLoaded", () => {
   const dotsBtn = document.getElementById("dotsBtn");
   if(dotsBtn) dotsBtn.addEventListener("click", () => alert("More options menu ⚙️"));
 
-  // ===== Slider =====
-  const slides = document.getElementById("slides");
-  if(slides){
-    const slideImages = Array.from(slides.children);
-    const totalSlides = slideImages.length;
+const slidesContainer = document.getElementById("slides");
+if (slidesContainer) {
+  const slides = Array.from(slidesContainer.children);
+  const totalSlides = slides.length;
 
-    const firstClone = slideImages[0].cloneNode(true);
-    const lastClone = slideImages[totalSlides - 1].cloneNode(true);
+  // Clone first and last slides for infinite effect
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[totalSlides - 1].cloneNode(true);
 
-    slides.appendChild(firstClone);
-    slides.insertBefore(lastClone, slides.children[0]);
+  slidesContainer.appendChild(firstClone);
+  slidesContainer.insertBefore(lastClone, slidesContainer.children[0]);
 
-    let index = 1;
-    slides.style.transform = `translateX(-${index * 100}%)`;
+  let index = 1;
+  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
 
-    function nextSlide() {
-      index++;
-      slides.style.transition = "transform 0.7s ease-in-out";
-      slides.style.transform = `translateX(-${index * 100}%)`;
-    }
-    let sliderInterval = setInterval(nextSlide, 3000);
-
-    slides.addEventListener("transitionend", () => {
-      if(index >= slides.children.length - 1){
-        slides.style.transition = "none";
-        index = 1;
-        slides.style.transform = `translateX(-${index * 100}%)`;
-      }
-      if(index <= 0){
-        slides.style.transition = "none";
-        index = slides.children.length - 2;
-        slides.style.transform = `translateX(-${index * 100}%)`;
-      }
-    });
+  function nextSlide() {
+    index++;
+    slidesContainer.style.transition = "transform 0.7s ease-in-out";
+    slidesContainer.style.transform = `translateX(-${index * 100}%)`;
   }
 
+  const sliderInterval = setInterval(nextSlide, 3000);
+
+  slidesContainer.addEventListener("transitionend", () => {
+    if (index >= slidesContainer.children.length - 1) {
+      slidesContainer.style.transition = "none";
+      index = 1;
+      slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+    }
+    if (index <= 0) {
+      slidesContainer.style.transition = "none";
+      index = slidesContainer.children.length - 2;
+      slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+    }
+  });
+}
   // ===== Games =====
   const gamesContainer = document.getElementById("gamesContainer");
   if (gamesContainer) {
