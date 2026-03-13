@@ -83,7 +83,8 @@ body{
 
 .slides{
   display:flex;
-  transition:transform 0.5s ease-in-out;
+  transition:transform 0.7s ease-in-out;
+  width:100%;
 }
 
 .slides img{
@@ -91,11 +92,12 @@ body{
   height:300px; 
   object-fit:cover;
   border-radius:20px;
+  flex-shrink:0;
   transition:transform 0.3s;
 }
 
 .slides img:hover{
-  transform:scale(1.05); /* subtle zoom effect */
+  transform:scale(1.05);
 }
 
 /* BUTTONS */
