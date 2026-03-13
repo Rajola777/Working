@@ -18,117 +18,89 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ===== MENU BUTTON (Three Lines) =====
+  // ===== MENU / NOTIFICATION / DOTS =====
   const menuBtn = document.getElementById("menuBtn");
-  if(menuBtn){
-    menuBtn.addEventListener("click", () => {
-      alert("Sidebar menu will open here 🔥");
-    });
-  }
+  if(menuBtn) menuBtn.addEventListener("click", () => alert("Sidebar menu will open here 🔥"));
 
-  // ===== NOTIFICATION =====
   const notificationBtn = document.getElementById("notificationBtn");
-  if(notificationBtn){
-    notificationBtn.addEventListener("click", () => {
-      alert("No new notifications 🔔");
-    });
-  }
+  if(notificationBtn) notificationBtn.addEventListener("click", () => alert("No new notifications 🔔"));
 
-  // ===== THREE DOTS =====
   const dotsBtn = document.getElementById("dotsBtn");
-  if(dotsBtn){
-    dotsBtn.addEventListener("click", () => {
-      alert("More options menu ⚙️");
+  if(dotsBtn) dotsBtn.addEventListener("click", () => alert("More options menu ⚙️"));
+
+  // ===== SLIDER =====
+  const slides = document.getElementById("slides");
+  if(slides){
+    const slideImages = Array.from(slides.children);
+    const totalSlides = slideImages.length;
+
+    // Clone first and last slide for infinite loop
+    const firstClone = slideImages[0].cloneNode(true);
+    const lastClone = slideImages[totalSlides - 1].cloneNode(true);
+
+    slides.appendChild(firstClone);
+    slides.insertBefore(lastClone, slides.children[0]);
+
+    let index = 1; // start from first real slide
+    slides.style.transform = `translateX(-${index * 100}%)`;
+
+    function nextSlide() {
+      index++;
+      slides.style.transition = "transform 0.7s ease-in-out";
+      slides.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    // Auto slide every 3 seconds
+    let sliderInterval = setInterval(nextSlide, 3000);
+
+    slides.addEventListener("transitionend", () => {
+      if(index >= slides.children.length - 1){ // reached cloned first
+        slides.style.transition = "none";
+        index = 1;
+        slides.style.transform = `translateX(-${index * 100}%)`;
+      }
+      if(index <= 0){ // reached cloned last
+        slides.style.transition = "none";
+        index = slides.children.length - 2;
+        slides.style.transform = `translateX(-${index * 100}%)`;
+      }
     });
   }
-// ===== SLIDER =====
-const slides = document.getElementById("slides");
-if (slides) {
-  const slideImages = Array.from(slides.children);
-  const totalSlides = slideImages.length;
 
-  // Clone first and last slide for smooth infinite effect
-  const firstClone = slideImages[0].cloneNode(true);
-  const lastClone = slideImages[totalSlides - 1].cloneNode(true);
+  // ===== GAMES POPUP =====
+  const games = [
+    { title:"Where Winds Meet", desc:"Let the wind carry your legend to the bottomless....", img:"images/wherewindsmeet.jpg", download:"downloads/spiderman.apk", rating:4.5 },
+    { title:"Black Myth:Wukong", desc:"Open world action adventure game.", img:"images/blackmythwukong.jpg", download:"downloads/gta.apk", rating:5 },
+    { title:"Red Dead Redemption", desc:"High speed racing game with many cars.", img:"images/reddeadredemption.jpg", download:"downloads/racing.apk", rating:4 }
+  ];
 
-  slides.appendChild(firstClone);
-  slides.insertBefore(lastClone, slides.children[0]);
+  const container = document.getElementById("gamesContainer");
 
-  let index = 1; // start from actual first slide
-  slides.style.transform = `translateX(-${index * 100}%)`;
+  games.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "game-card";
 
-  function nextSlide() {
-    index++;
-    slides.style.transition = "transform 0.7s ease-in-out";
-    slides.style.transform = `translateX(-${index * 100}%)`;
-  }
+    card.innerHTML = `
+      <img src="${game.img}">
+      <div class="game-info">
+        <h3>${game.title}</h3>
+        <p>${game.desc}</p>
+        <div class="game-rating">${"★".repeat(Math.floor(game.rating))}</div>
+      </div>
+    `;
 
-  // Auto slide every 3 seconds
-  let sliderInterval = setInterval(nextSlide, 3000);
+    card.addEventListener("click", () => {
+      document.getElementById("popupImg").src = game.img;
+      document.getElementById("popupTitle").innerText = game.title;
+      document.getElementById("popupDesc").innerText = game.desc;
+      document.getElementById("popupDownload").href = game.download;
+      document.getElementById("gamePopup").style.display = "flex";
+    });
 
-  slides.addEventListener("transitionend", () => {
-    if (index >= slides.children.length - 1) {
-      slides.style.transition = "none";
-      index = 1;
-      slides.style.transform = `translateX(-${index * 100}%)`;
-    }
-    if (index <= 0) {
-      slides.style.transition = "none";
-      index = slides.children.length - 2;
-      slides.style.transform = `translateX(-${index * 100}%)`;
-    }
-  });
-}
-const games = [
-  {
-    title:"Where Winds Meet",
-    desc:"Let the wind carry your legend to the bottomless....",
-    img:"images/wherewindsmeet.jpg",
-    download:"downloads/spiderman.apk",
-    rating:4.5
-  },
-  {
-    title:"Black Myth:Wukong",
-    desc:"Open world action adventure game.",
-    img:"images/blackmythwukong.jpg",
-    download:"downloads/gta.apk",
-    rating:5
-  },
-  {
-    title:"Red Dead Redemption",
-    desc:"High speed racing game with many cars.",
-    img:"images/reddeadredemption.jpg",
-    download:"downloads/racing.apk",
-    rating:4
-  }
-];
-
-const container = document.getElementById("gamesContainer");
-
-games.forEach(game => {
-  const card = document.createElement("div");
-  card.className = "game-card";
-
-  card.innerHTML = `
-    <img src="${game.img}">
-    <div class="game-info">
-      <h3>${game.title}</h3>
-      <p>${game.desc}</p>
-      <div class="game-rating">${"★".repeat(Math.floor(game.rating))}</div>
-    </div>
-  `;
-
-  card.addEventListener("click", () => {
-    document.getElementById("popupImg").src = game.img;
-    document.getElementById("popupTitle").innerText = game.title;
-    document.getElementById("popupDesc").innerText = game.desc;
-    document.getElementById("popupDownload").href = game.download;
-    document.getElementById("gamePopup").style.display = "flex";
+    container.appendChild(card);
   });
 
-  container.appendChild(card);
+  window.closeGame = function(){
+    document.getElementById("gamePopup").style.display = "none";
+  }
 });
-
-function closeGame(){
-  document.getElementById("gamePopup").style.display = "none";
-}
