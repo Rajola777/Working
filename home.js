@@ -57,23 +57,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 const games = [
   {
-    title:"Spider-Man",
-    desc:"Swing across the city and defeat villains.",
-    img:"images/spiderman.jpg",
+    title:"Where Winds Meet",
+    desc:"Let the wind carry your legend to the bottomless....",
+    img:"images/wherewindsmeet.jpg",
     download:"downloads/spiderman.apk",
     rating:4.5
   },
   {
-    title:"GTA",
+    title:"Black Myth:Wukong",
     desc:"Open world action adventure game.",
-    img:"images/gta.jpg",
+    img:"images/blackmythwukong.jpg",
     download:"downloads/gta.apk",
     rating:5
   },
   {
-    title:"Racing Game",
+    title:"Red Dead Redemption",
     desc:"High speed racing game with many cars.",
-    img:"images/racing.jpg",
+    img:"images/reddeadredemption.jpg",
     download:"downloads/racing.apk",
     rating:4
   }
