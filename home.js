@@ -55,3 +55,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+const games = document.querySelectorAll(".game-img");
+
+games.forEach(game => {
+  game.addEventListener("click", () => {
+
+    document.getElementById("popupImg").src = game.dataset.img;
+    document.getElementById("popupTitle").innerText = game.dataset.title;
+    document.getElementById("popupDesc").innerText = game.dataset.desc;
+    document.getElementById("popupDownload").href = game.dataset.download;
+
+    document.getElementById("gamePopup").style.display = "flex";
+
+  });
+});
+
+function closeGame(){
+  document.getElementById("gamePopup").style.display = "none";
+}
