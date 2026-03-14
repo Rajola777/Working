@@ -180,7 +180,52 @@ a {
 .dot.active {
   background: #3ea1ff;
 }
+/* TRENDING SLIDER */
+.trending-slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
 
+.trending-slides {
+  display: flex;
+  transition: transform 0.7s ease-in-out;
+}
+
+.trending-slides img {
+  flex: 0 0 100%;
+  height: 200px;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 15px;
+  transition: transform 0.3s;
+}
+
+.trending-slides img:hover {
+  transform: scale(1.03);
+}
+
+.trending-dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.trending-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  cursor: pointer;
+}
+
+.trending-dots .dot.active {
+  background: #3ea1ff;
+}
 /* ===============================
    GAME CARDS GRID
 ================================= */
