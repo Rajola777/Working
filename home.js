@@ -491,7 +491,7 @@ const container = document.getElementById("gamesContainer");
         <img src="${game.img}">
         <div class="game-info">
           <h3>${game.title}</h3>
-          <p>${game.desc}</p>
+          <p>${game.desc.substring(0,60)}...</p>
           <div class="game-rating">${"★".repeat(Math.floor(game.rating))}</div>
           <div class="game-price">${game.price === 0 ? "Free" : "$" + game.price}</div>
         </div>
