@@ -1,7 +1,8 @@
 // ===============================
 // CONFIG
 // ===============================
-const API_KEY = "b6eb9c2e474d41e3bcc8550e873623de";
+const API_KEY = "b6eb9c2e474d41e3bcc8550e873623de"
+  ;
 const BASE_URL = "https://api.rawg.io/api";
 
 // ===============================
@@ -138,7 +139,9 @@ function createSlider(games) {
 function goSlide(index) {
   currentSlide = index;
   slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-  document.querySelectorAll(".dot").forEach((dot, idx) => {
+  
+  // Scope to main slider only
+  dotsContainer.querySelectorAll(".dot").forEach((dot, idx) => {
     dot.classList.toggle("active", idx === currentSlide);
   });
 }
@@ -239,7 +242,9 @@ function renderTrending(games) {
 function goTrending(i) {
   trendingIndex = i;
   trendingSlidesContainer.style.transform = `translateX(-${i * 100}%)`;
-  document.querySelectorAll(".trending-dots .dot").forEach((dot, idx) => {
+  
+  // Scope to trending slider dots only
+  trendingDotsContainer.querySelectorAll(".dot").forEach((dot, idx) => {
     dot.classList.toggle("active", idx === trendingIndex);
   });
 }
