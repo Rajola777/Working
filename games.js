@@ -2,7 +2,7 @@ const gameList = document.getElementById("gameList");
 let activeTab = "pc";
 
 // RAWG API key (you need to get your free key at https://rawg.io/apidocs)
-const API_KEY = "YOUR_RAWG_API_KEY";
+const API_KEY = "84cda4988dbc42d8878b2faa461495e2";
 
 // Platform IDs (example)
 // PC = 4, PSP = 8, Hacked = we will simulate (no real hacked games)
