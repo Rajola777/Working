@@ -78,33 +78,36 @@ function goAccount(){ window.location.href = "./account.html"; }
 
 /* Default PC page */
 displayGames(games.pc);
-// NAVIGATION
-const homeNav = document.getElementById("homeNav");
-const gamesNav = document.getElementById("gamesNav");
-const tournamentsNav = document.getElementById("tournamentsNav");
-const chatNav = document.getElementById("chatNav");
-const accountNav = document.getElementById("accountNav");
+// Bottom Navigation System
 
-// Go to pages
-homeNav.onclick = () => {
-  window.location.href = "home.html";
+const navItems = document.querySelectorAll(".bottom-nav .nav-item");
+
+const pageMap = {
+  homeNav: "home.html",
+  gamesNav: "games.html",
+  tournamentsNav: "tournaments.html",
+  chatNav: "chat.html",
+  accountNav: "account.html"
 };
 
-AccountNav.onclick = () => {
-  window.location.href = "account.html";
-};
+// detect current page
+const currentPage = window.location.pathname.split("/").pop();
 
-tournamentsNav.onclick = () => {
-  window.location.href = "tournaments.html";
-};
+navItems.forEach(item => {
 
-chatNav.onclick = () => {
-  window.location.href = "chat.html";
-};
+  const id = item.id;
 
-accountNav.onclick = () => {
-  window.location.href = "account.html";
-};
+  // set active page
+  if(pageMap[id] === currentPage){
+    item.classList.add("active");
+  }
+
+  // navigation click
+  item.addEventListener("click", () => {
+    window.location.href = pageMap[id];
+  });
+
+});
 // Set active nav automatically based on current page
 const navItems = document.querySelectorAll(".bottom-nav .nav-item");
 const currentPage = window.location.pathname.split("/").pop(); // get current file name
