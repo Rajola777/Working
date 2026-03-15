@@ -1,4 +1,8 @@
-// ================= Label Animation =================
+const user = localStorage.getItem("crunkUser");
+
+if(user){
+    window.location.href = "index.html";
+}
 window.addEventListener('load', ()=>{
     const labels = document.querySelectorAll('.form-control label');
 
