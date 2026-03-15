@@ -1,13 +1,17 @@
-// Label animation
+// ================= Label Animation =================
 window.addEventListener('load', ()=>{
     const labels = document.querySelectorAll('.form-control label');
+
     labels.forEach(label =>{
         label.innerHTML = label.innerText
         .split('')
-        .map((letter, idx) => `<span style="transition-delay:${idx * 50}ms">${letter}</span>`)
+        .map((letter, idx) =>
+            `<span style="transition-delay:${idx * 50}ms">${letter}</span>`
+        )
         .join('');
     });
 });
+
 
 // ================= Firebase Setup =================
 const firebaseConfig = {
@@ -22,85 +26,58 @@ const firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
 
-let confirmationResult;
 
-// Form handling
-const form = document.getElementById('loginForm');
-const actionBtn = document.getElementById('actionBtn');
-const otpDiv = document.getElementById('otpDiv');
-const message = document.getElementById('message');
+// ================= Form Handling =================
+const form = document.getElementById("loginForm");
+const message = document.getElementById("message");
 
-form.addEventListener('submit', (e)=>{
+form.addEventListener("submit", async (e)=>{
+
     e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const otp = document.getElementById('otp').value.trim();
 
-    // Step 1: Send OTP
-    if(actionBtn.innerText === "Send OTP"){
-        if(phone === ""){
-            message.innerText = "Please enter your phone number.";
-            return;
-        }
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
 
-        // Setup reCAPTCHA
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-            'size': 'invisible',
-            'callback': (response) => { }
+    if(!username || !email || !phone){
+        message.innerText = "Please fill all fields.";
+        return;
+    }
+
+    try{
+
+        // Create simple user id
+        const userId = "user_" + Date.now();
+
+        // Save to Firestore
+        await db.collection("users").doc(userId).set({
+            username: username,
+            email: email,
+            phone: phone,
+            createdAt: new Date()
         });
 
-        auth.signInWithPhoneNumber(phone, window.recaptchaVerifier)
-            .then((res)=>{
-                confirmationResult = res;
-                message.innerText = "OTP sent! Check your phone.";
-                otpDiv.style.display = "block";
-                actionBtn.innerText = "Verify OTP";
-            })
-            .catch((err)=>{
-                console.error(err);
-                message.innerText = "Error sending OTP. Check phone number.";
-            });
-    }
-    // Step 2: Verify OTP
-    else if(actionBtn.innerText === "Verify OTP"){
-        if(otp === ""){
-            message.innerText = "Please enter OTP.";
-            return;
-        }
+        // Save session locally
+        localStorage.setItem("crunkUser", JSON.stringify({
+            username: username,
+            email: email,
+            phone: phone
+        }));
 
-        confirmationResult.confirm(otp)
-            .then((result)=>{
-                const user = result.user;
-                message.innerText = "Phone verified!";
+        message.innerText = "Login successful!";
 
-                // Check if user exists in Firestore
-                db.collection("users").doc(user.uid).get()
-                .then((doc)=>{
-                    if(doc.exists){
-                        // Existing user → go to home
-                        message.innerText = "Welcome back!";
-                        window.location.href = "home.html";
-                    } else {
-                        // New user → save data
-                        db.collection("users").doc(user.uid).set({
-                            username: username,
-                            email: email,
-                            phone: phone
-                        })
-                        .then(()=>{
-                            message.innerText = "Account created!";
-                            window.location.href = "home.html";
-                        });
-                    }
-                });
-            })
-            .catch((err)=>{
-                console.error(err);
-                message.innerText = "Invalid OTP. Try again.";
-            });
+        // Redirect to home
+        setTimeout(()=>{
+            window.location.href = "index.html";
+        },1000);
+
+    }catch(err){
+
+        console.error(err);
+        message.innerText = "Error saving user. Try again.";
+
     }
+
 });
