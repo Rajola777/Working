@@ -3,14 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- App Icons -->
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#05070d">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-
 <title>Crunk Games</title>
 
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
@@ -18,34 +10,35 @@
 </head>
 <body>
 
-<!-- LOADER -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"><div></div><div></div><div></div></div>
-</div>
-
 <div class="app">
-
-  <!-- PROFILE INFO -->
-  <div class="profile-info">
-    <img id="profilePic" src="icons/default-avatar.png" alt="Profile Picture">
-    <h3 id="usernameDisplay"></h3>
-    <p id="emailDisplay"></p>
-    <button id="logoutBtn">Logout</button>
-  </div>
 
   <!-- TOPBAR -->
   <header class="topbar">
-    <div class="menu" id="menuBtn"><i class="bx bx-menu"></i></div>
-    <div class="brand"><h1>Crunk Games</h1></div>
-    <div class="icons"><i class="bx bx-bell" id="notificationBtn"></i></div>
+    <div class="brand"><h1>Crunk games</h1></div>
+
+    <div class="topbar-right">
+      <!-- Google Profile -->
+      <div class="profile-dropdown">
+        <img id="googleProfilePic" src="placeholder.png" alt="Profile">
+        <div class="dropdown-menu">
+          <div class="account-info">
+            <img id="dropdownProfilePic" src="placeholder.png">
+            <div>
+              <p id="accountName">User Name</p>
+              <p id="accountEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutBtn">Logout</button>
+        </div>
+      </div>
+
+      <!-- Notification -->
+      <i class="bx bx-bell" id="notificationBtn"></i>
+    </div>
   </header>
 
-  <!-- SIDEBAR -->
-  <div id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <h2>Menu</h2>
-      <span id="closeSidebar" class="close-btn">✖</span>
-    </div>
+  <!-- HAMBURGER MENU STATIC LINKS -->
+  <div class="sidebar">
     <ul class="sidebar-menu">
       <li id="menuSettings">Settings</li>
       <li id="menuPrivacy">Privacy & Policy</li>
@@ -53,8 +46,6 @@
       <li id="menuHelp">Help / Support</li>
       <li id="menuRate">Rate App</li>
       <li id="menuAbout">About</li>
-      <li id="menuLogout">Logout</li>
-      <li id="menuTheme">Theme: <span id="themeLabel">Dark</span></li>
     </ul>
   </div>
 
@@ -67,7 +58,9 @@
   <!-- PROMO -->
   <div class="promo">
     <div class="promo-icon"><i class="bx bxs-gift"></i></div>
-    <div class="promo-text"><h2>Free venocoins</h2></div>
+    <div class="promo-text">
+      <h2>Free venocoins</h2>
+    </div>
     <button class="claim">Claim</button>
   </div>
 
@@ -83,7 +76,7 @@
   <!-- GAME POPUP -->
   <div id="gamePopup" class="popup">
     <div class="popup-content">
-      <span class="close" onclick="closeGame()">✖</span>
+      <span class="close">✖</span>
       <img id="popupImg">
       <h2 id="popupTitle"></h2>
       <div id="popupRating"></div>
@@ -94,15 +87,6 @@
       <a id="popupDownload"><button>Download</button></a>
     </div>
   </div>
-
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-    <div class="nav-item active" id="homeNav"><i class="bx bx-home"></i><span>Home</span></div>
-    <div class="nav-item" id="gamesNav"><i class="bx bx-joystick"></i><span>Games</span></div>
-    <div class="nav-item" id="tournamentsNav"><i class="bx bx-trophy"></i><span>Tournaments</span></div>
-    <div class="nav-item" id="chatNav"><i class="bx bx-chat"></i><span>Chat</span></div>
-    <div class="nav-item" id="accountNav"><i class="bx bx-user"></i><span>Account</span></div>
-  </nav>
 
 </div>
 
