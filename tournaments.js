@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chat = document.getElementById("chatNav");
   const account = document.getElementById("accountNav");
 
-  if(home) home.onclick = () => go("index.html");
+  if(home) home.onclick = () => go("home.html");
   if(games) games.onclick = () => go("games.html");
   if(tournaments) tournaments.onclick = () => go("tournaments.html");
   if(account) account.onclick = () => go("account.html");
