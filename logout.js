@@ -74,7 +74,7 @@ form.addEventListener("submit", async (e)=>{
 
         // Redirect to home
         setTimeout(()=>{
-            window.location.href = "index.html";
+            window.location.href = "home.html";
         },1000);
 
     }catch(err){
