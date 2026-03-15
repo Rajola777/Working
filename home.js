@@ -29,6 +29,26 @@ const closeSidebar = document.getElementById("closeSidebar");
 const menuTheme = document.getElementById("menuTheme");
 const themeLabel = document.getElementById("themeLabel");
 
+document.getElementById("menuSettings").onclick = () => location.href = "settings.html";
+document.getElementById("menuPrivacy").onclick = () => location.href = "privacy.html";
+document.getElementById("menuShare").onclick = () => {
+  if (navigator.share) {
+    navigator.share({
+      title: "Crunk Games",
+      url: window.location.href
+    }).catch(console.error);
+  } else {
+    alert("Share not supported on this browser!");
+  }
+};
+document.getElementById("menuHelp").onclick = () => location.href = "help.html";
+document.getElementById("menuRate").onclick = () => location.href = "rate.html";
+document.getElementById("menuAbout").onclick = () => location.href = "about.html";
+document.getElementById("menuLogout").onclick = () => {
+  // handle logout logic here
+  alert("Logged out!");
+};
+
 // ===============================
 // NAVIGATION
 // ===============================
