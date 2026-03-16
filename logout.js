@@ -1,31 +1,28 @@
-// ================= LABEL ANIMATION =================
-window.addEventListener('load', ()=>{
-
+// ================= LABEL ANIMATION & SESSION CHECK =================
+window.addEventListener('load', () => {
     const container = document.querySelector('.container');
     const user = localStorage.getItem("crunkUser");
 
-    if(user){
-        // User tayari alilogin → directly home
+    if (user) {
+        // User already logged in → go directly to home
         window.location.href = "home.html";
-        return; // stop everything else
+        return;
     }
 
-    // SHOW login page ONLY if user haijalogin
+    // Show login page only if user not logged in
     container.style.opacity = 1;
 
     // Animate labels
     const labels = document.querySelectorAll('.form-control label');
-    labels.forEach(label =>{
+    labels.forEach(label => {
         label.innerHTML = label.innerText
-        .split('')
-        .map((letter, idx) =>
-            `<span style="transition-delay:${idx * 50}ms">${letter}</span>`
-        )
-        .join('');
+            .split('')
+            .map((letter, idx) =>
+                `<span style="transition-delay:${idx * 50}ms">${letter}</span>`
+            )
+            .join('');
     });
-
 });
-
 
 // ================= FIREBASE SETUP =================
 const firebaseConfig = {
@@ -40,55 +37,60 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-
 // ================= FORM LOGIN =================
 const form = document.getElementById("loginForm");
 const message = document.getElementById("message");
 
-form.addEventListener("submit", async (e)=>{
+form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const username = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
     const phone = document.getElementById("phone").value.trim();
 
-    if(!username || !email || !phone){
+    if (!username || !email || !phone) {
         message.innerText = "Please fill all fields.";
         return;
     }
 
-    try{
+    // Optional: basic email & phone validation
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+        message.innerText = "Enter a valid email.";
+        return;
+    }
+    if (!/^\d{8,15}$/.test(phone)) {
+        message.innerText = "Enter a valid phone number.";
+        return;
+    }
+
+    try {
         const userId = "user_" + Date.now();
 
-        // Save to Firebase
+        // Save user to Firebase
         await db.collection("users").doc(userId).set({
-            username: username,
-            email: email,
-            phone: phone,
+            username,
+            email,
+            phone,
+            loginMethod: "form",
             createdAt: new Date()
         });
 
         // Save session locally
-        localStorage.setItem("crunkUser", JSON.stringify({
-            username, email, phone
-        }));
+        localStorage.setItem("crunkUser", JSON.stringify({ username, email, phone }));
 
         message.innerText = "Login successful!";
-
-        setTimeout(()=>{
+        setTimeout(() => {
             window.location.href = "home.html";
         }, 1000);
 
-    }catch(err){
+    } catch (err) {
         console.error(err);
         message.innerText = "Error saving user.";
     }
-
 });
 
-
 // ================= GOOGLE LOGIN =================
-function handleCredentialResponse(response){
+function handleCredentialResponse(response) {
     const data = parseJwt(response.credential);
 
     const user = {
@@ -100,7 +102,7 @@ function handleCredentialResponse(response){
     // Save session locally
     localStorage.setItem("crunkUser", JSON.stringify(user));
 
-    // Save to Firebase
+    // Save user to Firebase
     db.collection("users").doc(data.sub).set({
         username: data.name,
         email: data.email,
@@ -113,12 +115,11 @@ function handleCredentialResponse(response){
     window.location.href = "home.html";
 }
 
-
-// ================= TOKEN PARSER =================
-function parseJwt(token){
+// ================= JWT PARSER =================
+function parseJwt(token) {
     let base64Url = token.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    let jsonPayload = decodeURIComponent(atob(base64).split('').map(c=>{
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
     return JSON.parse(jsonPayload);
