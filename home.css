@@ -142,31 +142,33 @@ object-fit:cover;
 
 .dots{
 position:absolute;
-bottom:12px;
+bottom:15px;
 left:50%;
 transform:translateX(-50%);
 display:flex;
-gap:6px;
+gap:15px;
+padding: 6px 12px;
+boarder-radius: 20px;
+background: rgba(0, 0, 0, 0);
+justify-content: center;
 }
 
 .dot{
-width:8px;
-height:8px;
-background:#777;
+width:16px;
+height:16px;
+background: rgba(255, 255, 255, 0.4);
 border-radius:50%;
 cursor:pointer;
+transition: all 0.3 ease;
 }
-
-.dot.active{
-background:#34d399;
-width:18px;
-border-radius:6px;
+/* Dot active */
+.dot.active {
+  width: 22px;            /* kubwa zaidi */
+  height: 22px;
+  background: #ffb400;    /* golden color kwa active */
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(255, 180, 0, 0.7);
 }
-
-/* ===============================
-   SECTION TITLE
-================================ */
-
 .image-title{
 margin:20px 15px 10px 15px;
 }
