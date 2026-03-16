@@ -86,8 +86,6 @@ closeSidebar.addEventListener("click", () => sidebar.classList.remove("open"));
 // ===============================
 // FETCH GAMES
 // ===============================
-let sliderGames = [];
-let currentSlide = 0;
 
 async function fetchGames() {
   try {
