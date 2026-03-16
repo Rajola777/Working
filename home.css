@@ -115,33 +115,30 @@ border-radius:20px;
 cursor:pointer;
 font-weight:600;
 }
-
-/* ===============================
-   SLIDER
-================================ */
-
 .slider{
-position:relative;
-width:100%;
-height:260px;
-overflow:hidden;
-border-radius:16px;
-margin-top:10px;
+  position: relative;
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 16px;
+  margin-top: 10px;
 }
 
 .slides{
-display:flex;
-transition:transform .6s ease;
+  display: flex;
+  transition: transform 0.5s ease;
 }
 
 .slide{
-min-width:100%;
-height:260px;
-object-fit:cover;
+  min-width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 14px;
+  background:#020617;
 }
 
-/* Dots container – centred and transparent */
-.dots {
+/* Dots Container */
+.dots{
   position: absolute;
   bottom: 15px;
   left: 50%;
@@ -149,31 +146,31 @@ object-fit:cover;
   display: flex;
   gap: 12px;
   padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.25); /* transparent background */
   border-radius: 20px;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
+  background: rgba(0,0,0,0); /* completely transparent */
   justify-content: center;
   z-index: 10;
 }
 
-/* Dot style – big circles */
-.dot {
+/* Dot Styles */
+.dot{
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255,255,255,0.4);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-/* Active dot – bigger and golden */
-.dot.active {
-  width: 24px;
-  height: 24px;
-  background: #ffb400;
+.dot.active{
+  width: 28px;               /* kubwa zaidi */
+  height: 28px;
+  background: #ffb400;       /* golden color for active */
   transform: scale(1.3);
-  box-shadow: 0 0 8px rgba(255, 180, 0, 0.6);
+  box-shadow: 0 0 10px rgba(255,180,0,0.6);
 }
+
 .image-title{
 margin:20px 15px 10px 15px;
 }
