@@ -1,9 +1,13 @@
+// ===============================
+// GLOBAL VARIABLES
+// ===============================
 let sliderInterval;
-const googleUser = JSON.parse(localStorage.getItem("googleUser"));
+let sliderGames = [];
+let currentSlide = 0;
 
-if(!googleUser){
-window.location.href = "index.html";
-}
+const googleUser = JSON.parse(localStorage.getItem("googleUser"));
+if(!googleUser) window.location.href = "index.html";
+
 // ===============================
 // CONFIG
 // ===============================
@@ -36,31 +40,30 @@ const closeSidebar = document.getElementById("closeSidebar");
 const menuTheme = document.getElementById("menuTheme");
 const themeLabel = document.getElementById("themeLabel");
 
+// Profile Pic
+const profilePic = document.getElementById("profilePic");
+if(googleUser) profilePic.src = googleUser.picture;
+
+// ===============================
+// SIDEBAR NAVIGATION
+// ===============================
 document.getElementById("menuSettings").onclick = () => location.href = "settings.html";
 document.getElementById("menuPrivacy").onclick = () => location.href = "privacy.html";
 document.getElementById("menuShare").onclick = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: "Crunk Games",
-      url: window.location.href
-    }).catch(console.error);
-  } else {
-    alert("Share not supported on this browser!");
-  }
+  if(navigator.share){
+    navigator.share({ title: "Crunk Games", url: window.location.href }).catch(console.error);
+  } else alert("Share not supported on this browser!");
 };
 document.getElementById("menuHelp").onclick = () => location.href = "help.html";
 document.getElementById("menuRate").onclick = () => location.href = "rate.html";
 document.getElementById("menuAbout").onclick = () => location.href = "about.html";
 document.getElementById("menuLogout").onclick = () => {
-
-localStorage.removeItem("googleUser");
-
-location.href = "index.html";
-
+  localStorage.removeItem("googleUser");
+  location.href = "index.html";
 };
 
 // ===============================
-// NAVIGATION
+// BOTTOM NAV
 // ===============================
 document.getElementById("homeNav").onclick = () => location.href = "index.html";
 document.getElementById("gamesNav").onclick = () => location.href = "games.html";
@@ -73,12 +76,11 @@ document.getElementById("accountNav").onclick = () => location.href = "account.h
 // ===============================
 menuTheme.addEventListener("click", () => {
   document.body.classList.toggle("light-theme");
-  themeLabel.innerText =
-    document.body.classList.contains("light-theme") ? "Light" : "Dark";
+  themeLabel.innerText = document.body.classList.contains("light-theme") ? "Light" : "Dark";
 });
 
 // ===============================
-// SIDEBAR
+// OPEN/CLOSE SIDEBAR
 // ===============================
 menuBtn.addEventListener("click", () => sidebar.classList.add("open"));
 closeSidebar.addEventListener("click", () => sidebar.classList.remove("open"));
@@ -86,245 +88,156 @@ closeSidebar.addEventListener("click", () => sidebar.classList.remove("open"));
 // ===============================
 // FETCH GAMES
 // ===============================
-
-async function fetchGames() {
+async function fetchGames(){
   try {
-    const res = await fetch(
-      `${BASE_URL}/games?key=${API_KEY}&platforms=4,187&page_size=24&ordering=-added`
-    );
-
+    loader.style.display = "flex";
+    const res = await fetch(`${BASE_URL}/games?key=${API_KEY}&platforms=4,187&page_size=24&ordering=-added`);
     const data = await res.json();
     const games = data.results || [];
-
-    if (games.length === 0) {
-      gamesContainer.innerHTML =
-        "<p style='text-align:center;color:#ff6b6b'>No games found</p>";
+    if(games.length === 0){
+      gamesContainer.innerHTML = "<p style='text-align:center;color:#ff6b6b'>No games found</p>";
+      loader.style.display = "none";
       return;
     }
-
     renderGames(games);
-    createSlider(games.slice(0, 4));
-
-  } catch (err) {
+    createSlider(games.slice(0,4));
+    loader.style.display = "none";
+  } catch(err){
     console.error(err);
-    gamesContainer.innerHTML =
-      "<p style='text-align:center;color:#ff6b6b'>Failed to load games</p>";
+    gamesContainer.innerHTML = "<p style='text-align:center;color:#ff6b6b'>Failed to load games</p>";
+    loader.style.display = "none";
   }
 }
-loader.style.display = "flex";
 fetchGames();
+
 // ===============================
-// SEARCH
+// SEARCH FUNCTIONALITY
 // ===============================
 let searchTimeout;
-
 searchInput.addEventListener("input", () => {
-
-clearTimeout(searchTimeout);
-
-loader.style.display = "flex";
-
-searchTimeout = setTimeout(async () => {
-
-const query = searchInput.value.trim();
-
-
-    if (query.length < 2) {
-      fetchGames();
-      return;
-    }
-
+  clearTimeout(searchTimeout);
+  loader.style.display = "flex";
+  searchTimeout = setTimeout(async () => {
+    const query = searchInput.value.trim();
+    if(query.length < 2){ fetchGames(); return; }
     try {
-
-      const res = await fetch(
-        `${BASE_URL}/games?key=${API_KEY}&search=${query}`
-      );
-
+      const res = await fetch(`${BASE_URL}/games?key=${API_KEY}&search=${query}`);
       const data = await res.json();
-
       renderGames(data.results || []);
-
-    } catch (err) {
+      loader.style.display = "none";
+    } catch(err){
       console.error("Search error:", err);
+      loader.style.display = "none";
     }
-
   }, 500);
 });
 
 // ===============================
 // RENDER GAME CARDS
 // ===============================
-function renderGames(games) {
-
+function renderGames(games){
   gamesContainer.innerHTML = "";
-
-  games.forEach((game) => {
-
+  games.forEach(game => {
     const stars = "⭐".repeat(Math.round(game.rating || 0));
-
     const card = document.createElement("div");
     card.className = "game-card";
-
     card.innerHTML = `
-      <img src="${game.background_image || "placeholder.png"}">
+      <img src="${game.background_image || "placeholder.png"}" class="loading">
       <div class="game-info">
         <div class="game-title">${game.name}</div>
         <div class="game-date">${game.released || ""}</div>
         <div class="game-rating">${stars}</div>
       </div>
     `;
-
     card.onclick = () => openGame(game.id);
-
     gamesContainer.appendChild(card);
 
+    // IMAGE LOADING EFFECT
+    const img = card.querySelector("img");
+    img.onload = () => { img.classList.remove("loading"); img.classList.add("loaded"); };
   });
 }
 
 // ===============================
-// SLIDER
-let sliderInterval;
-let sliderGames = [];
-let currentSlide = 0;
-
-function goSlide(index) {
+// SLIDER FUNCTIONS
+// ===============================
+function goSlide(index){
   currentSlide = index;
-  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-  dotsContainer.querySelectorAll(".dot").forEach((dot, i) => {
-    dot.classList.toggle("active", i === index);
-  });
+  slidesContainer.style.transform = `translateX(-${index*100}%)`;
+  dotsContainer.querySelectorAll(".dot").forEach((dot,i) => dot.classList.toggle("active", i===index));
 }
 
-function createSlider(games) {
-  sliderGames = games.slice(0, 4); // lazima ziwe nne tu
-
+function createSlider(games){
+  sliderGames = games.slice(0,4);
   slidesContainer.innerHTML = "";
   dotsContainer.innerHTML = "";
-
-  sliderGames.forEach((game, i) => {
+  sliderGames.forEach((game,i)=>{
     const img = document.createElement("img");
     img.src = game.background_image;
     img.className = "slide";
     img.onclick = () => openGame(game.id);
     slidesContainer.appendChild(img);
-
     const dot = document.createElement("span");
     dot.className = "dot";
     dot.onclick = () => goSlide(i);
     dotsContainer.appendChild(dot);
   });
-
   goSlide(0);
-
   if(sliderInterval) clearInterval(sliderInterval);
-
-  sliderInterval = setInterval(() => {
-    currentSlide = (currentSlide + 1) % sliderGames.length;
-    goSlide(currentSlide);
-  }, 5000);
+  sliderInterval = setInterval(() => { currentSlide = (currentSlide+1)%sliderGames.length; goSlide(currentSlide); }, 5000);
 }
+
 // ===============================
 // GAME POPUP
 // ===============================
-async function openGame(id) {
-
+async function openGame(id){
   try {
-
     const res = await fetch(`${BASE_URL}/games/${id}?key=${API_KEY}`);
     const game = await res.json();
-
     popupTitle.innerText = game.name;
-
     const desc = game.description_raw || "";
-
-    popupDesc.innerText =
-      desc.length > 200
-        ? desc.substr(0, desc.lastIndexOf(" ", 200)) + "..."
-        : desc;
-
+    popupDesc.innerText = desc.length>200 ? desc.substr(0,desc.lastIndexOf(" ",200))+"..." : desc;
     popupImg.src = game.background_image || "placeholder.png";
 
     // Screenshots
-    const shotRes = await fetch(
-      `${BASE_URL}/games/${id}/screenshots?key=${API_KEY}`
-    );
-
+    const shotRes = await fetch(`${BASE_URL}/games/${id}/screenshots?key=${API_KEY}`);
     const shots = await shotRes.json();
-
     popupScreens.innerHTML = "";
-
-    (shots.results || []).slice(0, 6).forEach((s) => {
-
+    (shots.results||[]).slice(0,6).forEach(s=>{
       const img = document.createElement("img");
-
       img.src = s.image;
       img.className = "screen";
-
       popupScreens.appendChild(img);
-
     });
 
     // Trailer
-    const trailerRes = await fetch(
-      `${BASE_URL}/games/${id}/movies?key=${API_KEY}`
-    );
-
+    const trailerRes = await fetch(`${BASE_URL}/games/${id}/movies?key=${API_KEY}`);
     const trailerData = await trailerRes.json();
-
     const trailer = trailerData.results?.[0]?.data?.max || "";
+    popupTrailer.innerHTML = trailer ? `<video controls width="100%" style="border-radius:12px;background:#000"><source src="${trailer}" type="video/mp4"></video>` : "<div style='color:#ffb400'>No trailer available</div>";
 
-    popupTrailer.innerHTML = trailer
-      ? `<video controls width="100%" style="border-radius:12px;background:#000">
-          <source src="${trailer}" type="video/mp4">
-        </video>`
-      : "<div style='color:#ffb400'>No trailer available</div>";
-
-    popupDownload.onclick = () =>
-      window.open(game.website || "#", "_blank");
-
+    popupDownload.onclick = () => window.open(game.website||"#","_blank");
     gamePopup.style.display = "flex";
-
-  } catch (err) {
-
-    console.error("Error opening game:", err);
-
-  }
-
+  } catch(err){ console.error("Error opening game:", err); }
 }
 
 // ===============================
 // CLOSE POPUP
 // ===============================
-gamePopup.addEventListener("click", (e) => {
+gamePopup.addEventListener("click",(e)=>{ if(e.target===gamePopup || e.target.classList.contains("close")) closeGame(); });
+popupContent.addEventListener("click", e=>e.stopPropagation());
+function closeGame(){ gamePopup.style.display="none"; }
 
-  if (e.target === gamePopup || e.target.classList.contains("close")) {
-    closeGame();
-  }
-
-});
-
-popupContent.addEventListener("click", (e) => e.stopPropagation());
-
-function closeGame() {
-  gamePopup.style.display = "none";
-}
-if ("serviceWorker" in navigator) {
-
-window.addEventListener("load", () => {
-
-navigator.serviceWorker.register("/sw.js")
-.then(() => console.log("Service Worker Registered"))
-.catch(err => console.log("SW Error", err));
-
-});
-
-}
-const profilePic = document.getElementById("profilePic");
-if(googleUser){
-profilePic.src = googleUser.picture;
+// ===============================
+// SERVICE WORKER
+// ===============================
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("/sw.js").then(()=>console.log("Service Worker Registered")).catch(err=>console.log("SW Error",err));
+  });
 }
 
-
-window.addEventListener("load", () => {
-loader.style.display = "none";
-});
+// ===============================
+// HIDE LOADER ON LOAD
+// ===============================
+window.addEventListener("load",()=>loader.style.display="none");
