@@ -15,26 +15,22 @@
   <header class="topbar">
     <div class="menu" id="menuBtn"><i class="bx bx-menu"></i></div>
     <div class="brand"><h1>Crunk Games</h1></div>
-     <div class="topbar-right">
-
-  <div class="profile-dropdown">
-    <img id="googleProfilePic" src="placeholder.png" alt="Profile">
-    <div class="profile-popup">
-      <div class="account-info">
-        <img id="popupProfilePic" src="placeholder.png">
-        <div>
-          <p id="accountName">User Name</p>
-          <p id="accountEmail">user@example.com</p>
+    <div class="icons">
+      <div class="profile-dropdown">
+        <img id="googleProfilePic" class="profile-pic" src="placeholder.png" alt="Profile">
+        <div class="profile-popup">
+          <div class="account-info">
+            <img id="popupProfilePic" src="placeholder.png">
+            <div>
+              <p id="accountName">User Name</p>
+              <p id="accountEmail">user@example.com</p>
+            </div>
+          </div>
+          <button id="logoutBtn">Logout</button>
         </div>
       </div>
-      <button id="logoutBtn">Logout</button>
+      <i class="bx bx-bell" id="notificationBtn"></i>
     </div>
-  </div>
-
-  <i class="bx bx-bell" id="notificationBtn"></i>
-
-</div>
-    
   </header>
 
   <!-- SIDEBAR -->
@@ -59,20 +55,18 @@
   <!-- PROMO -->
   <div class="promo">
     <div class="promo-icon"><i class="bx bxs-gift"></i></div>
-    <div class="promo-text">
-      <h2>Free venocoins</h2>
-    </div>
+    <div class="promo-text"><h2>Free venocoins</h2></div>
     <button class="claim">Claim</button>
   </div>
 
   <!-- LOADER -->
   <div id="loader">
-  <div class="loader-dots">
-    <span></span>
-    <span></span>
-    <span></span>
+    <div class="loader-dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
   </div>
-</div>
 
   <!-- SLIDER -->
   <div class="slider">
@@ -91,6 +85,7 @@
       <h2 id="popupTitle"></h2>
       <div id="popupDesc"></div>
       <div id="popupScreens"></div>
+      <div id="popupTrailer"></div>
       <a id="popupDownload"><button>Download</button></a>
     </div>
   </div>
