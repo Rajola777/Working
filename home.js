@@ -185,54 +185,46 @@ function renderGames(games) {
 
 // ===============================
 // SLIDER
-// ===============================
-function createSlider(games) {
+let sliderInterval;
+let sliderGames = [];
+let currentSlide = 0;
 
-  sliderGames = games;
+function goSlide(index) {
+  currentSlide = index;
+  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+  dotsContainer.querySelectorAll(".dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === index);
+  });
+}
+
+function createSlider(games) {
+  sliderGames = games.slice(0, 4); // lazima ziwe nne tu
 
   slidesContainer.innerHTML = "";
   dotsContainer.innerHTML = "";
 
-  games.forEach((game, i) => {
-
+  sliderGames.forEach((game, i) => {
     const img = document.createElement("img");
     img.src = game.background_image;
     img.className = "slide";
     img.onclick = () => openGame(game.id);
-
     slidesContainer.appendChild(img);
 
     const dot = document.createElement("span");
     dot.className = "dot";
     dot.onclick = () => goSlide(i);
-
     dotsContainer.appendChild(dot);
-
   });
-if(sliderInterval){
-clearInterval(sliderInterval);
-}
 
-sliderInterval = setInterval(() => {
-
-currentSlide = (currentSlide + 1) % sliderGames.length;
-
-goSlide(currentSlide);
-
-}, 5000);
   goSlide(0);
-function goSlide(index) {
 
-  currentSlide = index;
+  if(sliderInterval) clearInterval(sliderInterval);
 
-  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-
-  dotsContainer.querySelectorAll(".dot").forEach((dot, i) => {
-    dot.classList.toggle("active", i === index);
-  });
-
+  sliderInterval = setInterval(() => {
+    currentSlide = (currentSlide + 1) % sliderGames.length;
+    goSlide(currentSlide);
+  }, 5000);
 }
-
 // ===============================
 // GAME POPUP
 // ===============================
