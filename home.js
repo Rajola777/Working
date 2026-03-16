@@ -105,7 +105,7 @@ async function fetchGames() {
     }
 
     renderGames(games);
-    createSlider(games.slice(0, 5));
+    createSlider(games.slice(0, 4));
 
   } catch (err) {
     console.error(err);
